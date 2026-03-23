@@ -18,7 +18,7 @@ export default function ReportsPage() {
     <div className="space-y-9">
       <PageHeader
         eyebrow="Monthly reports"
-        title="A monthly brief for performance and posture."
+        title="Monthly Reports"
         description="Your portfolio check-in delivered through an approved Selun x402 endpoint."
         actions={
           <div className="flex flex-wrap items-center gap-3">

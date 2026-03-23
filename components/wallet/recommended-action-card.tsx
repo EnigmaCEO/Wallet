@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { Badge } from "@/components/shared/badge";
 import { SurfaceCard } from "@/components/shared/surface-card";
 import { buttonClassName } from "@/components/shared/button-link";
 import type { ActionItem } from "@/types/demo";
@@ -12,15 +13,21 @@ export function RecommendedActionCard({
   action,
 }: RecommendedActionCardProps) {
   return (
-    <SurfaceCard className="flex h-full flex-col justify-between gap-6 border-indigo-300/18 bg-[linear-gradient(180deg,rgba(165,180,252,0.09),rgba(15,23,42,0.9))] p-6 shadow-[0_24px_80px_rgba(3,7,18,0.45),0_0_44px_rgba(129,140,248,0.12)]">
+    <SurfaceCard className="flex h-full flex-col justify-between gap-6 border-indigo-300/18 bg-[linear-gradient(180deg,rgba(99,102,241,0.14),rgba(15,23,42,0.94))] p-6 shadow-[0_24px_80px_rgba(3,7,18,0.45),0_0_44px_rgba(129,140,248,0.12)]">
       <div className="space-y-4">
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.28em] text-text-muted">
-            Recommended Action
-          </p>
-          <h2 className="font-display text-3xl font-semibold text-white">
-            {action.title}
-          </h2>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="space-y-2">
+            <p className="text-xs uppercase tracking-[0.28em] text-text-muted">
+              Guidance active
+            </p>
+            <h2 className="font-display text-3xl font-semibold text-white">
+              {action.title}
+            </h2>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <Badge tone="accent">Selun x402</Badge>
+          </div>
         </div>
 
         <div className="space-y-3">
@@ -35,7 +42,7 @@ export function RecommendedActionCard({
 
       <div className="rounded-[24px] border border-white/10 bg-white/[0.03] p-4">
         <div className="flex items-center justify-between gap-4">
-          <p className="text-sm text-white/72">Execution status</p>
+          <p className="text-sm text-white/72">Execution</p>
           <span className="rounded-full bg-emerald-400/10 px-3 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-emerald-200">
             x402 ready
           </span>

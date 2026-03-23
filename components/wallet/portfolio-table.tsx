@@ -1,9 +1,13 @@
-import type { ActivityItem, Holding } from "@/types/demo";
+import type {
+  ActivityItem,
+  Holding,
+  WalletQuickAction,
+  WalletQuickActionId,
+} from "@/types/demo";
 import { SurfaceCard } from "@/components/shared/surface-card";
 import { QuickWalletActions } from "@/components/wallet/quick-wallet-actions";
 import { TooltipWrapper } from "@/components/wallet/tooltip-wrapper";
 import { cx, formatCurrency } from "@/lib/utils";
-import type { WalletQuickAction } from "@/types/demo";
 
 type PortfolioTableProps = {
   activeTab: "portfolio" | "activity" | "actions";
@@ -11,6 +15,8 @@ type PortfolioTableProps = {
   holdings: Holding[];
   activity: ActivityItem[];
   quickActions: WalletQuickAction[];
+  activeQuickActionId: WalletQuickActionId;
+  onQuickActionSelect: (id: WalletQuickActionId) => void;
 };
 
 const tabs = [
@@ -32,24 +38,26 @@ export function PortfolioTable({
   holdings,
   activity,
   quickActions,
+  activeQuickActionId,
+  onQuickActionSelect,
 }: PortfolioTableProps) {
   return (
     <SurfaceCard className="overflow-hidden p-0">
       <div className="flex flex-col gap-5 border-b border-white/10 px-5 py-6 sm:px-6 md:flex-row md:items-start md:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.28em] text-text-muted">
-            Workspace
+            Capital allocation
           </p>
           <h2 className="mt-2 font-display text-3xl font-semibold text-white">
             {activeTab === "portfolio"
-              ? "Your Current Allocation"
+              ? "Portfolio positions"
               : activeTab === "actions"
-                ? "Wallet Actions"
+                ? "Wallet controls"
                 : "Recent Activity"}
           </h2>
           <p className="mt-2 text-sm text-white/60">
             {activeTab === "portfolio"
-              ? "Current positions and the role each asset plays in your strategy."
+              ? "Current positions, exposure, and the role each asset plays in your strategy."
               : activeTab === "actions"
                 ? "Familiar wallet controls kept inside the same guided workspace."
                 : "The latest updates shaping your portfolio decisions."}
@@ -65,7 +73,7 @@ export function PortfolioTable({
               className={cx(
                 "rounded-full px-4 py-2 text-sm font-semibold transition",
                 activeTab === tab.id
-                  ? "bg-primary-soft text-indigo-100"
+                  ? "bg-[linear-gradient(180deg,rgba(99,102,241,0.18),rgba(79,70,229,0.16))] text-indigo-100 shadow-[0_0_22px_rgba(129,140,248,0.08)]"
                   : "bg-white/[0.04] text-white/60 hover:bg-white/[0.08] hover:text-white",
               )}
             >
@@ -135,7 +143,12 @@ export function PortfolioTable({
         ) : null}
 
         {activeTab === "actions" ? (
-          <QuickWalletActions actions={quickActions} embedded />
+          <QuickWalletActions
+            actions={quickActions}
+            embedded
+            activeActionId={activeQuickActionId}
+            onSelectAction={onQuickActionSelect}
+          />
         ) : null}
 
         {activeTab === "activity" ? (

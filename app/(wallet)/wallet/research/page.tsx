@@ -7,7 +7,7 @@ export default function ResearchPage() {
     <div className="space-y-8">
       <PageHeader
         eyebrow="Token research"
-        title="Understand an asset before acting."
+        title="Asset Research"
         description="Portfolio research delivered through an approved Selun x402 endpoint."
         actions={
           <div className="flex flex-wrap gap-3">

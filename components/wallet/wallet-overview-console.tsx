@@ -13,6 +13,7 @@ import type {
   OnboardingResponse,
   PortfolioActionMode,
   PortfolioInsight,
+  WalletQuickActionId,
   WalletQuickAction,
   WalletSummary,
 } from "@/types/demo";
@@ -41,9 +42,16 @@ export function WalletOverviewConsole({
   insight,
 }: WalletOverviewConsoleProps) {
   const [activeTab, setActiveTab] = useState<WalletTab>("portfolio");
+  const [activeQuickActionId, setActiveQuickActionId] =
+    useState<WalletQuickActionId>(quickActions[0]?.id ?? "receive");
 
   const primaryAction =
     actions.find((action) => action.mode === actionMode) ?? actions[0];
+
+  const handleQuickActionSelect = (actionId: WalletQuickActionId) => {
+    setActiveQuickActionId(actionId);
+    setActiveTab("actions");
+  };
 
   return (
     <div className="space-y-8 lg:space-y-10">
@@ -56,8 +64,14 @@ export function WalletOverviewConsole({
         ctaHref={insight.ctaHref}
       />
 
-      <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <PortfolioSummaryCard summary={summary} profile={profile} />
+      <section className="grid gap-6 xl:grid-cols-[1.18fr_0.82fr]">
+        <PortfolioSummaryCard
+          summary={summary}
+          profile={profile}
+          quickActions={quickActions}
+          activeQuickActionId={activeQuickActionId}
+          onQuickActionSelect={handleQuickActionSelect}
+        />
         <RecommendedActionCard action={primaryAction} />
       </section>
 
@@ -67,6 +81,8 @@ export function WalletOverviewConsole({
         holdings={holdings}
         activity={activity}
         quickActions={quickActions}
+        activeQuickActionId={activeQuickActionId}
+        onQuickActionSelect={setActiveQuickActionId}
       />
     </div>
   );

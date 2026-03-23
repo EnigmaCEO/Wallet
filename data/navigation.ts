@@ -23,17 +23,21 @@ export const walletNavigation: NavigationItem[] = [
   {
     label: "Overview",
     href: "/wallet",
+    description: "Balance and portfolio",
   },
   {
     label: "Services",
     href: "/wallet/selun",
+    description: "Approved x402 execution",
   },
   {
     label: "Research",
     href: "/wallet/research",
+    description: "Portfolio-aware insight",
   },
   {
     label: "Reports",
     href: "/wallet/reports",
+    description: "Monthly assessment",
   },
 ];

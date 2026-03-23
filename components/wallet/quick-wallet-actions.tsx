@@ -10,24 +10,29 @@ import type { WalletQuickAction, WalletQuickActionId } from "@/types/demo";
 type QuickWalletActionsProps = {
   actions: WalletQuickAction[];
   embedded?: boolean;
+  activeActionId?: WalletQuickActionId;
+  onSelectAction?: (id: WalletQuickActionId) => void;
 };
 
 const iconMap: Record<WalletQuickActionId, string> = {
   receive: "R",
   send: "S",
   swap: "X",
-  deposit: "D",
+  allocate: "A",
 };
 
 export function QuickWalletActions({
   actions,
   embedded = false,
+  activeActionId: controlledActionId,
+  onSelectAction,
 }: QuickWalletActionsProps) {
-  const [activeActionId, setActiveActionId] = useState<WalletQuickActionId>(
+  const [internalActionId, setInternalActionId] = useState<WalletQuickActionId>(
     actions[0]?.id ?? "receive",
   );
   const [feedback, setFeedback] = useState<string | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const activeActionId = controlledActionId ?? internalActionId;
 
   const activeAction = useMemo(
     () =>
@@ -60,6 +65,16 @@ export function QuickWalletActions({
     }, 2200);
   };
 
+  const handleSelectAction = (actionId: WalletQuickActionId) => {
+    if (onSelectAction) {
+      onSelectAction(actionId);
+    } else {
+      setInternalActionId(actionId);
+    }
+
+    setFeedback(null);
+  };
+
   const content = (
     <div className="space-y-5">
       {embedded ? (
@@ -82,7 +97,7 @@ export function QuickWalletActions({
               Familiar wallet actions, ready when needed.
             </h2>
             <p className="mt-2 max-w-2xl text-sm leading-7 text-white/62">
-              Receive, send, swap, or fund the wallet while Sagitta keeps the
+              Receive, send, swap, or allocate new capital while Sagitta keeps the
               guidance layer intact.
             </p>
           </div>
@@ -102,10 +117,7 @@ export function QuickWalletActions({
             <button
               key={action.id}
               type="button"
-              onClick={() => {
-                setActiveActionId(action.id);
-                setFeedback(null);
-              }}
+              onClick={() => handleSelectAction(action.id)}
               className={cx(
                 "rounded-[22px] border px-4 py-4 text-left transition duration-200",
                 isActive

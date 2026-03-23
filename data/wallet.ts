@@ -181,9 +181,9 @@ export const recentActivity: ActivityItem[] = [
   },
   {
     title: "USDC funding lane opened",
-    detail: "Deposit flow ready.",
+    detail: "New capital is ready for guided allocation.",
     timestamp: "Today at 9:18 AM",
-    type: "deposit",
+    type: "allocation",
   },
   {
     title: "Monthly brief drafted",
@@ -285,16 +285,16 @@ export const walletQuickActions: WalletQuickAction[] = [
     ],
   },
   {
-    id: "deposit",
-    label: "Deposit",
-    hint: "Fund the wallet",
-    title: "Open a deposit flow",
+    id: "allocate",
+    label: "Allocate",
+    hint: "Fund and deploy",
+    title: "Start an allocation flow",
     description:
-      "Simulate the funding step that gets new capital into the wallet before allocation or rebalancing.",
-    status: "Funding lane open",
-    note: "A normal wallet deposit flow can sit beside Sagitta guidance without changing the product story.",
-    primaryCta: "Open Deposit Flow",
-    feedback: "Deposit flow opened for USDC funding via linked account.",
+      "Simulate bringing new capital into Sagitta and passing it directly into Selun for a goal-aligned starting mix.",
+    status: "Allocation lane open",
+    note: "New money can enter the wallet and move straight into Selun allocation instead of stopping at a generic deposit screen.",
+    primaryCta: "Start Allocation",
+    feedback: "New capital staged for Selun allocation.",
     details: [
       {
         label: "Source",
@@ -310,7 +310,7 @@ export const walletQuickActions: WalletQuickAction[] = [
       },
       {
         label: "Next step",
-        value: "Move into allocation",
+        value: "Selun builds the starting mix",
       },
     ],
   },

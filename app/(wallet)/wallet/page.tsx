@@ -29,17 +29,14 @@ export default function WalletPage() {
           </p>
         </div>
 
-        <div className="flex flex-col items-start gap-2 lg:items-end">
+        <div className="flex items-start lg:items-end">
           <ButtonLink
             href="/wallet/research"
             variant="secondary"
             className="self-start border-indigo-300/16 bg-white/[0.08] shadow-[0_0_28px_rgba(129,140,248,0.08)] lg:self-auto"
           >
-            Ask Anything About Your Portfolio
+            Ask about your portfolio
           </ButtonLink>
-          <p className="max-w-xs text-sm text-white/52 lg:text-right">
-            Get insights, comparisons, and explanations instantly
-          </p>
         </div>
       </div>
 
