@@ -7,15 +7,14 @@ import { PortfolioSummaryCard } from "@/components/wallet/portfolio-summary-card
 import { PortfolioTable } from "@/components/wallet/portfolio-table";
 import { RecommendedActionCard } from "@/components/wallet/recommended-action-card";
 import type {
-  ActionItem,
   ActivityItem,
   Holding,
   OnboardingResponse,
-  PortfolioActionMode,
   PortfolioInsight,
   WalletQuickActionId,
   WalletQuickAction,
   WalletSummary,
+  ActionItem,
 } from "@/types/demo";
 
 type WalletTab = "portfolio" | "activity" | "actions";
@@ -24,29 +23,24 @@ type WalletOverviewConsoleProps = {
   summary: WalletSummary;
   holdings: Holding[];
   quickActions: WalletQuickAction[];
-  actions: ActionItem[];
   activity: ActivityItem[];
   profile: OnboardingResponse;
-  actionMode: PortfolioActionMode;
   insight: PortfolioInsight;
+  primaryAction: ActionItem;
 };
 
 export function WalletOverviewConsole({
   summary,
   holdings,
   quickActions,
-  actions,
   activity,
   profile,
-  actionMode,
   insight,
+  primaryAction,
 }: WalletOverviewConsoleProps) {
   const [activeTab, setActiveTab] = useState<WalletTab>("portfolio");
   const [activeQuickActionId, setActiveQuickActionId] =
     useState<WalletQuickActionId>(quickActions[0]?.id ?? "receive");
-
-  const primaryAction =
-    actions.find((action) => action.mode === actionMode) ?? actions[0];
 
   const handleQuickActionSelect = (actionId: WalletQuickActionId) => {
     setActiveQuickActionId(actionId);

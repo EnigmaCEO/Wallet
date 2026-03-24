@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import {
   getGoalProfileSummary,
@@ -15,12 +15,15 @@ import { buttonClassName } from "@/components/shared/button-link";
 import { OnboardingStepper } from "@/components/onboarding/onboarding-stepper";
 import { GoalSelectionCard } from "@/components/onboarding/goal-selection-card";
 import { SurfaceCard } from "@/components/shared/surface-card";
+import { createDemoWalletState, saveDemoWalletStateToStorage } from "@/lib/demo-wallet";
 import type { OnboardingResponse } from "@/types/demo";
 
 export function OnboardingFlow() {
+  const router = useRouter();
   const [answers, setAnswers] = useState<Partial<OnboardingResponse>>({});
   const [currentStep, setCurrentStep] = useState(0);
   const [isAdvancing, setIsAdvancing] = useState(false);
+  const [isStarting, setIsStarting] = useState(false);
 
   const currentQuestion = onboardingQuestions[currentStep];
   const isFinalStep = currentQuestion.id === "startMode";
@@ -71,6 +74,18 @@ export function OnboardingFlow() {
   const previewDetail = getOnboardingPreviewDetail(effectiveAnswers);
   const recommendedStartModeMessage =
     getRecommendedStartModeMessage(effectiveAnswers);
+
+  const handleStartPortfolio = () => {
+    if (isStarting) {
+      return;
+    }
+
+    const profile = effectiveAnswers as OnboardingResponse;
+
+    setIsStarting(true);
+    saveDemoWalletStateToStorage(createDemoWalletState(profile));
+    router.push("/wallet");
+  };
 
   return (
     <div className="grid items-start gap-5 lg:grid-cols-[1.16fr_0.84fr]">
@@ -161,13 +176,19 @@ export function OnboardingFlow() {
             ) : null}
 
             <div className="flex flex-wrap gap-3">
-              <Link href="/wallet" className={buttonClassName("primary")}>
-                Start My Portfolio
-              </Link>
+              <button
+                type="button"
+                onClick={handleStartPortfolio}
+                className={buttonClassName("primary")}
+                disabled={isStarting}
+              >
+                {isStarting ? "Opening Wallet..." : "Start My Portfolio"}
+              </button>
               <button
                 type="button"
                 onClick={handleBack}
                 className={buttonClassName("secondary")}
+                disabled={isStarting}
               >
                 Back one step
               </button>

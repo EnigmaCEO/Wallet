@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { selunAllocation, selunContent, selunExecutionNote } from "@/data/selun";
-import { buttonClassName } from "@/components/shared/button-link";
+import { ButtonLink, buttonClassName } from "@/components/shared/button-link";
 import { Badge } from "@/components/shared/badge";
 import { SurfaceCard } from "@/components/shared/surface-card";
 import { AllocationCard } from "@/components/wallet/allocation-card";
@@ -12,25 +12,54 @@ import type { OnboardingResponse, PortfolioActionMode } from "@/types/demo";
 type SelunAllocationExperienceProps = {
   profile: OnboardingResponse;
   mode: PortfolioActionMode;
+  onAllocationGenerated?: () => void;
 };
 
 export function SelunAllocationExperience({
   profile,
   mode,
+  onAllocationGenerated,
 }: SelunAllocationExperienceProps) {
   const [status, setStatus] = useState<"idle" | "loading" | "complete">("idle");
+  const [activeSignalIndex, setActiveSignalIndex] = useState(0);
   const content = selunContent[mode];
+  const timeoutsRef = useRef<number[]>([]);
+
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach((timeout) => window.clearTimeout(timeout));
+    };
+  }, []);
 
   const handleGenerate = () => {
     if (status === "loading") {
       return;
     }
 
+    timeoutsRef.current.forEach((timeout) => window.clearTimeout(timeout));
+    timeoutsRef.current = [];
     setStatus("loading");
+    setActiveSignalIndex(0);
 
-    window.setTimeout(() => {
+    if (content.executionSignals.length > 1) {
+      content.executionSignals.slice(1).forEach((_, index) => {
+        const timeout = window.setTimeout(() => {
+          setActiveSignalIndex(index + 1);
+        }, (index + 1) * 600);
+
+        timeoutsRef.current.push(timeout);
+      });
+    }
+
+    const completionTimeout = window.setTimeout(() => {
       setStatus("complete");
+
+      if (mode === "allocation") {
+        onAllocationGenerated?.();
+      }
     }, 1800);
+
+    timeoutsRef.current.push(completionTimeout);
   };
 
   return (
@@ -73,16 +102,38 @@ export function SelunAllocationExperience({
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={handleGenerate}
-            className={buttonClassName(
-              "primary",
-              "w-full shadow-[0_0_46px_rgba(129,140,248,0.28)] hover:-translate-y-0.5 hover:shadow-[0_0_58px_rgba(165,180,252,0.34)]",
-            )}
-          >
-            {status === "loading" ? content.loadingLabel : content.ctaLabel}
-          </button>
+          {status === "complete" ? (
+            <div className="space-y-3 rounded-[24px] border border-indigo-300/18 bg-[linear-gradient(180deg,rgba(99,102,241,0.12),rgba(15,23,42,0.76))] p-4">
+              <p className="text-xs uppercase tracking-[0.24em] text-indigo-100/78">
+                Next step
+              </p>
+              <p className="text-sm leading-6 text-white/72">
+                {content.nextStepDescription}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <ButtonLink
+                  href={content.primaryFollowUpHref}
+                  className="shadow-[0_0_46px_rgba(129,140,248,0.28)] hover:shadow-[0_0_58px_rgba(165,180,252,0.34)]"
+                >
+                  {content.primaryFollowUpLabel}
+                </ButtonLink>
+                <ButtonLink href={content.secondaryFollowUpHref} variant="secondary">
+                  {content.secondaryFollowUpLabel}
+                </ButtonLink>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={handleGenerate}
+              className={buttonClassName(
+                "primary",
+                "w-full shadow-[0_0_46px_rgba(129,140,248,0.28)] hover:-translate-y-0.5 hover:shadow-[0_0_58px_rgba(165,180,252,0.34)]",
+              )}
+            >
+              {status === "loading" ? content.loadingLabel : content.ctaLabel}
+            </button>
+          )}
 
           <div className="space-y-2">
             <p className="text-sm leading-6 text-white/62">{content.ctaNote}</p>
@@ -165,6 +216,35 @@ export function SelunAllocationExperience({
 
         {status === "loading" ? (
           <SurfaceCard className="space-y-5">
+            <div className="grid gap-3 md:grid-cols-3">
+              {content.executionSignals.map((signal, index) => {
+                const isActive = index <= activeSignalIndex;
+
+                return (
+                  <div
+                    key={signal}
+                    className={`rounded-[20px] border px-4 py-3 transition ${
+                      isActive
+                        ? "border-indigo-300/24 bg-[linear-gradient(180deg,rgba(99,102,241,0.12),rgba(15,23,42,0.72))] shadow-[0_0_28px_rgba(129,140,248,0.12)]"
+                        : "border-white/10 bg-white/[0.03]"
+                    }`}
+                  >
+                    <p className="text-[0.68rem] uppercase tracking-[0.22em] text-text-muted">
+                      Step {index + 1}
+                    </p>
+                    <div className="mt-2 flex items-center justify-between gap-3">
+                      <p className="text-sm font-medium text-white">{signal}</p>
+                      <span
+                        className={`h-2.5 w-2.5 rounded-full ${
+                          isActive ? "bg-indigo-200 shadow-[0_0_14px_rgba(165,180,252,0.8)]" : "bg-white/12"
+                        }`}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
             <p className="text-xs uppercase tracking-[0.28em] text-indigo-100/80">
               Building recommendation
             </p>
@@ -202,12 +282,25 @@ export function SelunAllocationExperience({
                     {content.summaryTitle}
                   </h3>
                 </div>
-                <Badge tone="positive">Ready for execution later</Badge>
+                <Badge tone="positive">
+                  {mode === "allocation"
+                    ? "Portfolio updated"
+                    : "Ready for execution later"}
+                </Badge>
               </div>
 
               <p className="text-sm leading-7 text-white/72">
                 {content.summaryBody}
               </p>
+
+              <div className="rounded-[22px] border border-white/10 bg-white/[0.03] p-4">
+                <p className="text-xs uppercase tracking-[0.24em] text-text-muted">
+                  {content.nextStepTitle}
+                </p>
+                <p className="mt-3 text-sm leading-6 text-white/68">
+                  {content.nextStepDescription}
+                </p>
+              </div>
             </SurfaceCard>
           </>
         ) : null}

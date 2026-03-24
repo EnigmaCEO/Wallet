@@ -4,16 +4,30 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 
 import {
+  getPortfolioResearchContext,
+  getResearchContextLine,
   getMockResearchAnswer,
-  researchPrompts,
+  getResearchPromptsForState,
 } from "@/data/research";
 import { buttonClassName } from "@/components/shared/button-link";
 import { Badge } from "@/components/shared/badge";
 import { SurfaceCard } from "@/components/shared/surface-card";
+import type { DemoWalletState, Holding } from "@/types/demo";
 
-export function ResearchPromptBox() {
-  const [query, setQuery] = useState(researchPrompts[0]);
-  const [answer, setAnswer] = useState(getMockResearchAnswer(researchPrompts[0]));
+type ResearchPromptBoxProps = {
+  demoState: DemoWalletState;
+  holdings: Holding[];
+};
+
+export function ResearchPromptBox({
+  demoState,
+  holdings,
+}: ResearchPromptBoxProps) {
+  const prompts = getResearchPromptsForState(demoState, holdings);
+  const context = getPortfolioResearchContext(demoState, holdings);
+  const initialQuery = prompts[0];
+  const [query, setQuery] = useState(initialQuery);
+  const [answer, setAnswer] = useState(getMockResearchAnswer(initialQuery));
   const [isLoading, setIsLoading] = useState(false);
   const [reportQueued, setReportQueued] = useState(false);
 
@@ -50,6 +64,28 @@ export function ResearchPromptBox() {
         </p>
       </div>
 
+      <div className="rounded-[24px] border border-indigo-300/12 bg-[linear-gradient(180deg,rgba(99,102,241,0.08),rgba(15,23,42,0.68))] p-5">
+        <p className="text-xs uppercase tracking-[0.28em] text-indigo-100/74">
+          Current portfolio context
+        </p>
+        <h3 className="mt-3 font-display text-2xl font-semibold text-white">
+          {context.title}
+        </h3>
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-white/68">
+          {context.description}
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {context.focusItems.map((item) => (
+            <div
+              key={item}
+              className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/75"
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <textarea
           value={query}
@@ -60,7 +96,7 @@ export function ResearchPromptBox() {
         />
 
         <div className="flex flex-wrap gap-2">
-          {researchPrompts.map((prompt) => (
+          {prompts.map((prompt) => (
             <button
               key={prompt}
               type="button"
@@ -115,6 +151,9 @@ export function ResearchPromptBox() {
           <p className="inline-flex items-center gap-2 text-sm text-indigo-100/72">
             <span className="h-1.5 w-1.5 rounded-full bg-indigo-200/75" />
             {answer.liveSignal}
+          </p>
+          <p className="text-sm text-white/58">
+            {getResearchContextLine(query, demoState, holdings)}
           </p>
 
           <p className="text-sm leading-7 text-white/72">{answer.summary}</p>

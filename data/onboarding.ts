@@ -69,15 +69,15 @@ export const onboardingQuestions: OnboardingQuestion[] = [
   {
     id: "startMode",
     prompt: "How would you like to start?",
-    description: "Pick a direct start or a guided mix.",
+    description: "Choose how the first 10,000 USDC should enter the wallet.",
     options: [
       {
         label: "Buy a token directly",
-        hint: "Start with one asset.",
+        hint: "Fund first, then choose.",
       },
       {
         label: "Guided allocation",
-        hint: "Start with a full mix.",
+        hint: "Fund and let Selun build the mix.",
       },
     ],
   },
@@ -114,9 +114,9 @@ const selectionFeedbackByField: Record<OnboardingField, Record<string, string>> 
   },
   startMode: {
     "Buy a token directly":
-      "Direct buy selected - starting with a single position.",
+      "Direct buy selected - funding 10,000 USDC and keeping it ready for the first purchase.",
     "Guided allocation":
-      "Guided allocation selected - starting with a full portfolio mix.",
+      "Guided allocation selected - funding 10,000 USDC and letting Selun build the first mix.",
   },
 };
 
@@ -140,8 +140,10 @@ const horizonPreviewByValue: Record<string, string> = {
 };
 
 const startModePreviewByValue: Record<string, string> = {
-  "Buy a token directly": "You can begin with one asset and build from there.",
-  "Guided allocation": "A guided allocation gives you the clearest starting point.",
+  "Buy a token directly":
+    "The wallet funds 10,000 USDC first, then leaves it ready for a direct purchase.",
+  "Guided allocation":
+    "The wallet funds 10,000 USDC and lets Selun turn it into a starting portfolio.",
 };
 
 export function getGoalProfileSummary(
@@ -153,8 +155,8 @@ export function getGoalProfileSummary(
   const startMode = profile.startMode ?? mockOnboardingResponses.startMode;
   const startPhrase =
     startMode === "Buy a token directly"
-      ? "Start with a direct buy."
-      : "Start with a guided mix.";
+      ? "The wallet starts with 10,000 USDC ready for the first buy."
+      : "The wallet starts with 10,000 USDC and a guided mix built by Selun.";
 
   return `Built for ${objective.toLowerCase()}, ${risk.toLowerCase()} risk, and the ${horizon.toLowerCase()}. ${startPhrase}`;
 }
@@ -201,8 +203,8 @@ export function getRecommendedStartModeMessage(
   const startMode = profile.startMode ?? mockOnboardingResponses.startMode;
 
   if (startMode === "Buy a token directly") {
-    return "You can start with a direct buy, but guided allocation is still the recommended path for this profile.";
+    return "The wallet will fund 10,000 USDC first, then leave it ready for the first asset purchase.";
   }
 
-  return "Recommended: Start with a guided allocation based on your profile.";
+  return "Recommended: Fund 10,000 USDC and let guided allocation build the first mix.";
 }

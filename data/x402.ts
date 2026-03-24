@@ -9,9 +9,9 @@ export const x402LaneContent = {
   controlValue: "Approved services only",
   controlNote:
     "Sagitta exposes new services only after they clear approval and policy review.",
-  expansionTitle: "Other approved x402 services can plug in next.",
+  expansionTitle: "The wallet expands into a service network.",
   expansionDescription:
-    "The wallet can expand from Selun into other approved lanes for deployment, protection, and monitoring while keeping the same guided controls.",
+    "Sagitta can expand from Selun into other approved x402 lanes for deployment, protection, and monitoring while keeping the same guided controls.",
   expansionNote: "Approved services appear here once they are cleared for use.",
 };
 
@@ -25,7 +25,7 @@ export const liveX402Endpoints: X402Endpoint[] = [
     surface: "Allocation + rebalance",
     output: "Portfolio plan before execution",
     ctaLabel: "Simulate outcome",
-    activeCtaLabel: "Inspect service",
+    activeCtaLabel: "See execution flow",
   },
   {
     title: "Research",
@@ -35,8 +35,8 @@ export const liveX402Endpoints: X402Endpoint[] = [
       "Turns token and market questions into portfolio-aware insight with clear stance and impact framing.",
     surface: "Portfolio research",
     output: "Insight, confidence, and allocation impact",
-    ctaLabel: "Inspect service",
-    activeCtaLabel: "Inspect service",
+    ctaLabel: "Explore service",
+    activeCtaLabel: "View how it works",
   },
   {
     title: "Reports",
@@ -46,8 +46,8 @@ export const liveX402Endpoints: X402Endpoint[] = [
       "Delivers monthly portfolio check-ins with assessment, changes over time, and direct next-step shortcuts.",
     surface: "Performance reporting",
     output: "Monthly brief with action shortcuts",
-    ctaLabel: "Preview integration",
-    activeCtaLabel: "Inspect service",
+    ctaLabel: "View how it works",
+    activeCtaLabel: "View how it works",
   },
 ];
 

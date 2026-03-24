@@ -25,6 +25,13 @@ function formatHorizon(horizon: string) {
   return horizon.toLowerCase().replace(" term", "-term");
 }
 
+function formatStrategyTitle(profile: OnboardingResponse) {
+  const objective = profile.objective.toLowerCase();
+  const risk = profile.risk.toLowerCase();
+
+  return `${risk.charAt(0).toUpperCase()}${risk.slice(1)} ${objective}`;
+}
+
 export function PortfolioSummaryCard({
   summary,
   profile,
@@ -42,6 +49,11 @@ export function PortfolioSummaryCard({
   const performanceTone =
     performance.percent >= 0 ? "text-emerald-300" : "text-rose-300";
   const stateSentence = `Goal-aligned for ${horizon} ${objective}.`;
+  const strategyTitle = formatStrategyTitle(profile);
+  const availableLabel =
+    summary.availableCash === summary.totalValue
+      ? "USDC ready for first action"
+      : "USDC kept ready";
   const surfaceActions = [
     quickActions.find((action) => action.id === "allocate"),
     quickActions.find((action) => action.id === "send"),
@@ -111,13 +123,13 @@ export function PortfolioSummaryCard({
               <p className="mt-3 font-display text-3xl font-semibold text-white">
                 {formatCurrency(summary.availableCash)}
               </p>
-              <p className="mt-2 text-sm text-white/58">USDC ready to deploy</p>
+              <p className="mt-2 text-sm text-white/58">{availableLabel}</p>
             </div>
 
             <div className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5">
               <p className="text-sm text-text-muted">Posture</p>
               <p className="mt-3 font-display text-2xl font-semibold text-white">
-                Balanced growth
+                {strategyTitle}
               </p>
               <p className="mt-2 text-sm text-white/62">{stateSentence}</p>
             </div>

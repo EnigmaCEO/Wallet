@@ -29,6 +29,16 @@ export type OnboardingField =
 
 export type OnboardingResponse = Record<OnboardingField, string>;
 
+export type DemoWalletStage = "funded" | "allocated";
+
+export type DemoWalletState = {
+  profile: OnboardingResponse;
+  fundingAmount: number;
+  fundingAsset: "USDC";
+  stage: DemoWalletStage;
+  updatedAt: string;
+};
+
 export type OnboardingOption = {
   label: string;
   hint: string;
