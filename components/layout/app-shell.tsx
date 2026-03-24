@@ -1,4 +1,5 @@
 import { WalletNavigation } from "@/components/layout/wallet-navigation";
+import { SidebarWalletActions } from "@/components/layout/sidebar-wallet-actions";
 import { BrandMark } from "@/components/shared/brand-mark";
 import { ButtonLink } from "@/components/shared/button-link";
 import { GuidanceBadge } from "@/components/wallet/guidance-badge";
@@ -14,23 +15,24 @@ export function AppShell({ children }: AppShellProps) {
       <div className="ambient-orb absolute right-[-80px] top-40 h-80 w-80 rounded-full bg-sky-300/10 blur-3xl" />
 
       <div className="relative mx-auto flex min-h-screen max-w-[1600px] gap-5 px-4 pb-10 pt-4 sm:px-6 xl:px-8">
-        <aside className="hidden xl:block xl:w-[280px] xl:shrink-0">
-          <div className="sticky top-4 flex h-[calc(100vh-2rem)] flex-col rounded-[32px] border border-white/10 bg-surface/88 p-5 shadow-[0_24px_80px_rgba(3,7,18,0.48)] backdrop-blur">
+        <aside className="hidden xl:block xl:w-[296px] xl:shrink-0">
+          <div className="sticky top-4 flex h-auto flex-col rounded-[32px] border border-white/10 bg-surface/88 p-5 shadow-[0_24px_80px_rgba(3,7,18,0.48)] backdrop-blur">
             <BrandMark href="/wallet" />
 
-            <div className="mt-8">
+            <div className="mt-7 space-y-5">
               <WalletNavigation orientation="vertical" />
+              <SidebarWalletActions />
             </div>
 
-            <div className="mt-auto space-y-4">
-              <div className="rounded-[24px] border border-sky-300/16 bg-[linear-gradient(180deg,rgba(59,130,246,0.14),rgba(8,14,30,0.82))] p-4">
+            <div className="mt-auto space-y-3 pt-4">
+              <div className="rounded-[24px] border border-sky-300/16 bg-[linear-gradient(180deg,rgba(59,130,246,0.14),rgba(8,14,30,0.82))] p-3.5">
                 <p className="text-xs uppercase tracking-[0.24em] text-sky-100/72">
                   Guidance
                 </p>
-                <div className="mt-3 flex flex-wrap items-center gap-3">
+                <div className="mt-2.5 flex flex-wrap items-center gap-3">
                   <GuidanceBadge />
                 </div>
-                <p className="mt-3 text-sm text-white/58">Selun x402 live.</p>
+                <p className="mt-2.5 text-sm text-white/58">Selun live.</p>
               </div>
 
               <ButtonLink href="/start" variant="secondary" className="w-full">

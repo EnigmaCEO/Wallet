@@ -173,7 +173,7 @@ export type ApprovedX402Service = {
   status: string;
 };
 
-export type WalletQuickActionId = "receive" | "send" | "swap" | "allocate";
+export type WalletQuickActionId = "receive" | "send" | "fund" | "allocate";
 
 export type WalletQuickActionDetail = {
   label: string;

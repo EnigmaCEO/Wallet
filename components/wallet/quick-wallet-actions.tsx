@@ -17,7 +17,7 @@ type QuickWalletActionsProps = {
 const iconMap: Record<WalletQuickActionId, string> = {
   receive: "R",
   send: "S",
-  swap: "X",
+  fund: "F",
   allocate: "A",
 };
 
@@ -97,7 +97,7 @@ export function QuickWalletActions({
               Familiar wallet actions, ready when needed.
             </h2>
             <p className="mt-2 max-w-2xl text-sm leading-7 text-white/62">
-              Receive, send, swap, or allocate new capital while Sagitta keeps the
+              Receive, send, fund, or allocate new capital while Sagitta keeps the
               guidance layer intact.
             </p>
           </div>

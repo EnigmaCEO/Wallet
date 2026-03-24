@@ -56,6 +56,7 @@ export function PortfolioSummaryCard({
       : "USDC kept ready";
   const surfaceActions = [
     quickActions.find((action) => action.id === "allocate"),
+    quickActions.find((action) => action.id === "fund"),
     quickActions.find((action) => action.id === "send"),
     quickActions.find((action) => action.id === "receive"),
   ].filter((action): action is WalletQuickAction => Boolean(action));
@@ -136,7 +137,7 @@ export function PortfolioSummaryCard({
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3 xl:hidden">
           {surfaceActions.map((action) => {
             const isActive = activeQuickActionId === action.id;
 

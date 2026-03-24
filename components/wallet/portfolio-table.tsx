@@ -20,9 +20,9 @@ type PortfolioTableProps = {
 };
 
 const tabs = [
-  { id: "portfolio", label: "Portfolio" },
-  { id: "actions", label: "Actions" },
-  { id: "activity", label: "Activity" },
+  { id: "portfolio", label: "Portfolio", className: "" },
+  { id: "actions", label: "Actions", className: "xl:hidden" },
+  { id: "activity", label: "Activity", className: "" },
 ] as const;
 
 const activityToneMap = {
@@ -71,6 +71,7 @@ export function PortfolioTable({
               type="button"
               onClick={() => onTabChange(tab.id)}
               className={cx(
+                tab.className,
                 "rounded-full px-4 py-2 text-sm font-semibold transition",
                 activeTab === tab.id
                   ? "bg-[linear-gradient(180deg,rgba(99,102,241,0.18),rgba(79,70,229,0.16))] text-indigo-100 shadow-[0_0_22px_rgba(129,140,248,0.08)]"
@@ -143,12 +144,14 @@ export function PortfolioTable({
         ) : null}
 
         {activeTab === "actions" ? (
+          <div className="xl:hidden">
           <QuickWalletActions
             actions={quickActions}
             embedded
             activeActionId={activeQuickActionId}
             onSelectAction={onQuickActionSelect}
           />
+          </div>
         ) : null}
 
         {activeTab === "activity" ? (

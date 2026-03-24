@@ -219,7 +219,7 @@ const allocationAction: ActionItem = {
   description: "Turn funded USDC into a goal-aligned starting mix through Selun.",
   supportingText:
     "This takes the first 10,000 and sizes it against the profile chosen during onboarding.",
-  executionHint: "Ready to execute using intelligent services.",
+  executionHint: "Live service execution enabled through Selun.",
   marketNote: "Fresh funding staged today",
   href: "/wallet/selun",
   cta: "Generate Allocation",
@@ -232,7 +232,7 @@ const rebalanceAction: ActionItem = {
   description: "Adjust the current mix as the portfolio drifts away from target posture.",
   supportingText:
     "This keeps the portfolio aligned as positions move and new opportunities appear.",
-  executionHint: "Ready to execute using intelligent services.",
+  executionHint: "Live service execution enabled through Selun.",
   marketNote: "Updated based on recent market changes",
   href: "/wallet/selun",
   cta: "Rebalance My Portfolio",
@@ -244,10 +244,10 @@ const learnHoldingsAction: ActionItem = {
   description: "Understand why each asset is in the new mix before making the next change.",
   supportingText:
     "Research can explain role, risk, and where each position fits inside the portfolio.",
-  executionHint: "Ready to open portfolio-aware research through Selun.",
-  marketNote: "Allocation completed recently",
+  executionHint: "Live service execution enabled through Selun research.",
+  marketNote: "Last allocation executed 2 minutes ago",
   href: "/wallet/research",
-  cta: "Learn this mix",
+  cta: "Understand My Portfolio",
 };
 
 const reportAction: ActionItem = {
@@ -270,12 +270,12 @@ function createPortfolioInsight(state: DemoWalletState): PortfolioInsight {
   if (state.stage === "allocated") {
     return {
       title: "Allocation complete",
-      meta: "Based on your completed first mix",
+      meta: "Portfolio updated via Selun",
       primaryMessage:
         "Your first Selun allocation is live and aligned with the profile you selected.",
       secondaryMessage:
         "Learn what each asset does before you make the next portfolio change.",
-      ctaLabel: "Understand this portfolio",
+      ctaLabel: "Explain My Allocation",
       ctaHref: "/wallet/research",
     };
   }
@@ -362,7 +362,7 @@ function createQuickActions(state: DemoWalletState): WalletQuickAction[] {
             "Stage another USDC funding event and let Selun fold it into the current portfolio.",
           status: "Additional capital lane open",
           note: "New money can still enter through the same guided allocation flow without breaking the portfolio story.",
-          primaryCta: "Stage New Allocation",
+          primaryCta: "Start New Allocation",
           feedback: "New capital staged for Selun to extend the current mix.",
           details: [
             {
@@ -414,7 +414,71 @@ function createQuickActions(state: DemoWalletState): WalletQuickAction[] {
           ],
         };
 
+  const fundActionCard: WalletQuickAction =
+    state.stage === "allocated"
+      ? {
+          id: "fund",
+          label: "Fund",
+          hint: "Add fresh USDC",
+          title: "Fund the wallet",
+          description:
+            "Bring new capital into Sagitta before deciding whether it should stay liquid or move into allocation.",
+          status: "Funding lane ready",
+          note: "Fresh capital can enter first, then move into allocation once it clears.",
+          primaryCta: "Open Funding Flow",
+          feedback: "Funding flow ready for another 10,000 USDC transfer.",
+          details: [
+            {
+              label: "Source",
+              value: "Linked bank",
+            },
+            {
+              label: "Settlement",
+              value: "Same day",
+            },
+            {
+              label: "Funding asset",
+              value: "USDC",
+            },
+            {
+              label: "Next step",
+              value: "Hold or allocate",
+            },
+          ],
+        }
+      : {
+          id: "fund",
+          label: "Fund",
+          hint: "Add fresh USDC",
+          title: "Fund the wallet",
+          description:
+            "Bring additional USDC into the wallet before deciding whether it should stay liquid or move into allocation.",
+          status: "Funding lane ready",
+          note: "This simulates the cash-in step that happens before allocation or a direct token purchase.",
+          primaryCta: "Open Funding Flow",
+          feedback: "Funding flow ready for another 10,000 USDC transfer.",
+          details: [
+            {
+              label: "Source",
+              value: "Linked bank",
+            },
+            {
+              label: "Settlement",
+              value: "Same day",
+            },
+            {
+              label: "Funding asset",
+              value: "USDC",
+            },
+            {
+              label: "Next step",
+              value: "Allocate or buy directly",
+            },
+          ],
+        };
+
   return [
+    allocationActionCard,
     {
       id: "receive",
       label: "Receive",
@@ -475,37 +539,7 @@ function createQuickActions(state: DemoWalletState): WalletQuickAction[] {
         },
       ],
     },
-    {
-      id: "swap",
-      label: "Swap",
-      hint: "Preview a trade",
-      title: "Preview a swap",
-      description:
-        "Model a simple token swap so the wallet still feels ready for day-to-day adjustments.",
-      status: "Quote available",
-      note: "Rates, route, and slippage are mocked for the investor demo.",
-      primaryCta: "Preview Swap",
-      feedback: "Swap preview ready: 5,000 USDC into 1.58 ETH.",
-      details: [
-        {
-          label: "From",
-          value: "5,000 USDC",
-        },
-        {
-          label: "To",
-          value: "ETH",
-        },
-        {
-          label: "Est. received",
-          value: "1.58 ETH",
-        },
-        {
-          label: "Slippage",
-          value: "0.50% max",
-        },
-      ],
-    },
-    allocationActionCard,
+    fundActionCard,
   ];
 }
 
